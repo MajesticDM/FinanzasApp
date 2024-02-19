@@ -1,0 +1,7 @@
+{
+  "name": "economic_app",
+  "integrations": {
+    "capacitor": {}
+  },
+  "type": "angular"
+}

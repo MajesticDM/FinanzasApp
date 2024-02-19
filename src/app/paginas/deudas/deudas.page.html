@@ -1,0 +1,179 @@
+<ion-header [translucent]="true">
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-menu-button></ion-menu-button>
+    </ion-buttons>
+    <ion-title>Deudas</ion-title>
+    <ion-button (click)="mostrarNuevaDeuda()" fill="outline" slot="end">
+      <ion-icon name="pricetags-outline"></ion-icon>
+    </ion-button>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true" scroll="false">
+  <div class="deudas" *ngIf="mostrarDeudas">
+    <swiper-container [slidesPerView]="cantidadSlidesPorVista" pagination="true" loop="true"
+      pagination-dynamic-bullets="true" autoplay="1000">
+      <swiper-slide (click)="mostrarInformacionDeuda(tarjeta)" *ngFor="let tarjeta of tarjetas">
+        <ion-card>
+          <ion-card-header>
+            <ion-card-title>{{tarjeta.nombre_deuda}}</ion-card-title>
+            <ion-card-subtitle>{{tarjeta.periocidad}}</ion-card-subtitle>
+          </ion-card-header>
+
+          <ion-card-content>
+            <p>{{tarjeta.necesario}}</p>
+            <p>{{tarjeta.ultimo_pago}}</p>
+          </ion-card-content>
+        </ion-card>
+        <!-- <swiper-slide>
+          <swiper-container direction="vertical" mousewheel="true">
+            <swiper-slide *ngFor="let pago of NuevaDeuda.pagos">
+              <ion-card>
+                <ion-card-header>
+                  <ion-card-title>{{pago.fecha_pago}}</ion-card-title>
+                  <ion-card-subtitle>{{pago.valor_pago}}</ion-card-subtitle>
+                </ion-card-header>
+
+                <ion-card-content>
+                  <p>{{pago.fecha_pago}}</p>
+                </ion-card-content>
+              </ion-card>
+            </swiper-slide>
+          </swiper-container>
+        </swiper-slide> -->
+      </swiper-slide>
+    </swiper-container>
+
+
+  </div>
+
+  <div class="deudas" *ngIf="mostrarDeudas">
+    <ion-card>
+      <ion-card-header>
+        <ion-card-title>Gráficas</ion-card-title>
+      </ion-card-header>
+      <ion-card-content>
+
+      </ion-card-content>
+    </ion-card>
+  </div>
+
+  <div class="deuda" *ngIf="crearDeudaNueva">
+    <ion-card>
+      <ion-card-header style="
+      display: flex;
+      flex-direction: row;
+      justify-content: flex-start;
+  ">
+        <ion-button fill="clear" (click)="mostrarCargarDeudas()"><ion-icon
+            name="chevron-back-outline"></ion-icon></ion-button>
+
+        <ion-card-title>Deuda</ion-card-title>
+
+      </ion-card-header>
+      <ion-card-content>
+        <ion-input [(ngModel)]="NuevaDeuda.nombre_deuda" label="Deuda" slot="start" label-placement="floating"
+          fill="outline"></ion-input>
+        <ion-select label="Periocidad" [(ngModel)]="NuevaDeuda.periocidad" label-placement="floating" fill="outline">
+          <ion-select-option>Semanal</ion-select-option>
+          <ion-select-option>Quincenal</ion-select-option>
+          <ion-select-option>Mensual</ion-select-option>
+          <ion-select-option>Trimestral</ion-select-option>
+          <ion-select-option>Semestral</ion-select-option>
+          <ion-select-option>Anual</ion-select-option>
+        </ion-select>
+
+        <ion-input [(ngModel)]="NuevaDeuda.valor_periodico" label="valor periódico" slot="start" type="number"
+          label-placement="floating" fill="outline"></ion-input>
+
+        <ion-input [(ngModel)]="NuevaDeuda.numero_cuotas" label="Número de cuotas" type="number" slot="start"
+          label-placement="floating" fill="outline"></ion-input>
+        <ion-input [(ngModel)]="NuevaDeuda.fecha_inicial" label="Fecha inicial" type="date" slot="start"
+          label-placement="floating" fill="outline"></ion-input>
+        <ion-input [(ngModel)]="NuevaDeuda.institucion" label="Institución" slot="start" label-placement="floating"
+          fill="outline"></ion-input>
+        <div class="check">
+          <ion-checkbox [(ngModel)]="NuevaDeuda.esNecesario" aria-label="EsNecesario">Es necesario?</ion-checkbox>
+
+        </div>
+        <ion-input [(ngModel)]="NuevaDeuda.comentario" label="Comentario" slot="start" label-placement="floating"
+          fill="outline"></ion-input>
+        <ion-input [(ngModel)]="NuevaDeuda.pagos.valor_pago" label="Pago inicial" slot="start"
+          label-placement="floating" fill="outline"></ion-input>
+        <ion-input [(ngModel)]="NuevaDeuda.pagos.fecha_pago" label="Cuándo?" type="date" slot="start"
+          label-placement="floating" fill="outline"></ion-input>
+        <ion-button fill="outline" (click)="CrearDeuda()"><ion-icon name="card-outline"></ion-icon></ion-button>
+      </ion-card-content>
+    </ion-card>
+  </div>
+  <div class="informacionDeuda" *ngIf="informacionDeuda">
+    <ion-card>
+      <ion-card-header style="
+      display: flex;
+      flex-direction: row;
+      justify-content: flex-start;
+  ">
+        <ion-button fill="clear" (click)="mostrarCargarDeudas()"><ion-icon
+            name="chevron-back-outline"></ion-icon></ion-button>
+        <ion-card-title>{{NuevaDeuda.nombre_deuda}}</ion-card-title>
+
+      </ion-card-header>
+      <p><ion-input readonly="true" [(ngModel)]="NuevaDeuda.periocidad"></ion-input></p>
+      <ion-card-content>
+
+        <p>$<ion-input readonly="true" [(ngModel)]="NuevaDeuda.valor_final"></ion-input></p>
+        <p><ion-input readonly="true" [(ngModel)]="NuevaDeuda.comentario"></ion-input></p>
+        <ion-button fill="outline" (click)="mostrarAbonarDeuda()">Abonar</ion-button>
+      </ion-card-content>
+      <ion-accordion-group>
+        <ion-accordion>
+          <ion-item slot="header" color="light">
+            <ion-badge slot="start">{{(NuevaDeuda.pagos.length)}}</ion-badge>
+            <ion-label>Pagos</ion-label>
+          </ion-item>
+          <div class="ion-padding" slot="content">
+            <ion-card *ngFor="let pago of NuevaDeuda.pagos">
+              <ion-card-content>
+                <h1>{{pago.valor_pago}}</h1>
+                <h3>{{pago.fecha_pago}}</h3>
+              </ion-card-content>
+            </ion-card>
+          </div>
+
+        </ion-accordion>
+      </ion-accordion-group>
+    </ion-card>
+
+  </div>
+  <div class="pagarDeuda" *ngIf="abonarDeuda">
+    <ion-card>
+      <ion-card-header style="
+      display: flex;
+      flex-direction: row;
+      justify-content: flex-start;
+  ">
+        <ion-button fill="clear" (click)="mostrarInformacionDeuda(NuevaDeuda)"><ion-icon
+            name="chevron-back-outline"></ion-icon></ion-button>
+        <ion-card-title>Abonar a dueda</ion-card-title>
+      </ion-card-header>
+      <ion-card-content>
+        <ion-input [(ngModel)]="PagarDeudaCreada.fecha_pago" type="date" label="fecha"
+          label-placement="floating"></ion-input>
+        <ion-input [(ngModel)]="PagarDeudaCreada.valor_pago" type="number" label="Valor"
+          label-placement="floating"></ion-input>
+        <ion-input disabled="true" readonly="true" [(ngModel)]="NuevaDeuda.valor_pagado" label="Valor acumulado"
+          label-placement="floating"></ion-input>
+        <ion-input disabled="true" readonly="true" [(ngModel)]="NuevaDeuda.nombre_deuda" label="Deuda"
+          label-placement="floating"></ion-input>
+      </ion-card-content>
+      <ion-button fill="clear" (click)="PagarDeuda()"><ion-icon name="checkmark-outline"></ion-icon></ion-button>
+      <ion-button fill="clear" (click)="mostrarInformacionDeuda(NuevaDeuda)"><ion-icon
+          name="close-outline"></ion-icon></ion-button>
+    </ion-card>
+
+  </div>
+  <ion-toast class="custom-toast" position="top" positionAnchor="header" [isOpen]="isToastOpen"
+    message="{{toastMessage}}" [duration]="2000" swipeGesture="vertical"
+    (didDismiss)="setRoleMessage($event)"></ion-toast>
+</ion-content>

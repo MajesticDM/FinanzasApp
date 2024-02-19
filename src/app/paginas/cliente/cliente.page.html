@@ -1,0 +1,69 @@
+<ion-header [translucent]="true">
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-menu-button></ion-menu-button>
+    </ion-buttons>
+    <ion-title>Clientes</ion-title>
+    <ion-button (click)="nuevoCliente()" fill="outline" slot="end">
+      <ion-icon name="person-add-outline"></ion-icon>
+    </ion-button>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true">
+  
+  <div *ngIf="mostrarClientesB" class="clientes">
+    <ion-list inset="true">
+      <ion-item-sliding class="itemCard" *ngFor="let cliente of clienteData; index as i">
+        <ion-item>
+          <ion-avatar aria-hidden="true" slot="start">
+            <img alt="" src="https://picsum.photos/200" />
+          </ion-avatar>
+          <ion-label>{{cliente.cli_nombres}}</ion-label>
+          <ion-button fill="clear" (click)="seleccionarCliente(cliente)" slot="end">
+            <ion-icon name="build-outline"></ion-icon>
+          </ion-button>
+          <ion-button fill="clear" (click)="eliminarCliente(cliente)" slot="end">
+            <ion-icon name="trash-outline"></ion-icon>
+          </ion-button>
+
+        </ion-item>
+
+      </ion-item-sliding>
+
+    </ion-list>
+  </div>
+  <div *ngIf="!mostrarClientesB" class="cliente">
+    <ion-button slot="start" (click)="mostrarClientes(true)">
+      <ion-icon name="arrow-back-outline"></ion-icon>
+    </ion-button>
+    <ion-input [(ngModel)]="data.cli_nombres" label="Nombres" slot="start" label-placement="floating" fill="outline"
+      value={{data.nombres}}></ion-input>
+    <ion-input [(ngModel)]="data.cli_apellidos" label="Apellidos" slot="start" label-placement="floating" fill="outline"
+      value={{data.apellidos}}></ion-input>
+    <ion-input [(ngModel)]="data.cli_email" label="email" label-placement="floating" fill="outline"
+      value={{data.email}}></ion-input>
+    <ion-input [(ngModel)]="data.cli_direccion" label="dirección" label-placement="floating" fill="outline"
+      value={{data.direccion}}></ion-input>
+    <ion-input [(ngModel)]="data.cli_telefono" label="teléfono" label-placement="floating" fill="outline"
+      value={{data.telefono}}></ion-input>
+
+    <ion-select [(ngModel)]="data.cli_profesion" aria-label="Profesion" label="Profesión" label-placement="floating"
+      fill="outline" value={{data.profesion}}>
+      <ion-select-option *ngFor="let profesion of profesiones; index as i"
+        value={{profesion._id}}>{{profesion.profession}}</ion-select-option>
+    </ion-select>
+    <ion-select [(ngModel)]="data.cli_plan_id" aria-label="Plan" label="Plan" label-placement="floating" fill="outline"
+      value={{data.plan}}>
+      <ion-select-option *ngFor="let plan of planes; index as i" value={{plan._id}}>{{plan.plan}}</ion-select-option>
+    </ion-select>
+
+    <ion-button *ngIf="guardar" (click)="guardarNuevoCliente()" slot="end">
+      <ion-icon name="save-outline"></ion-icon>
+    </ion-button>
+    <ion-button *ngIf="!guardar" (click)="actualizarCliente()" slot="end">
+      <ion-icon name="refresh-sharp"></ion-icon>
+    </ion-button>
+  </div>
+
+</ion-content>

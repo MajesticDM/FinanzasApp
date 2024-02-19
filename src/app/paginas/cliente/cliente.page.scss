@@ -1,0 +1,15 @@
+.cliente{
+    text-align: center;
+    padding: 5dvw;
+    justify-content: space-around;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    
+    ion-input{
+        margin: 1dvw;
+    }
+    ion-select{
+        margin: 1dvw;
+    }
+}
